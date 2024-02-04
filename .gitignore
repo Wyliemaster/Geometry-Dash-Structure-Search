@@ -1,0 +1,5 @@
+*.gmd 
+*.lib
+Debug/
+x64/
+.vs/
