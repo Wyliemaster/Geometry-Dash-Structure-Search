@@ -8,13 +8,12 @@ public: \
     __TYPE__ get##__NAME__() const { return this->__NAME__; } \
     void set##__NAME__(__TYPE__ __NAME__) { this->__NAME__ = __NAME__; } 
 
-class Level {
+class Object {
 public:
-    // Constructor
-    Level() = default; // Default constructor
+    Object() = default;
+    ~Object() = default;
 
-    // Copy constructor
-    void operator=(const Level& other) {
+    void operator=(const Object& other) {
         this->objectId = other.objectId;
         this->position_x = other.position_x;
         this->position_y = other.position_y;
@@ -23,7 +22,6 @@ public:
         this->flip_y = other.flip_y;
     }
 
-    // Macro for getter and setter
     SYNTHESIZE(objectId, unsigned int);
     SYNTHESIZE(position_x, int);
     SYNTHESIZE(position_y, int);
@@ -31,11 +29,6 @@ public:
     SYNTHESIZE(flip_x, bool);
     SYNTHESIZE(flip_y, bool);
 
-    // Destructor if needed
-    //~Level() = default; // Default destructor
-
-private:
-    const int LEVEL_LENGTH_LIMIT = 1000 * 30;
 };
 
 #endif

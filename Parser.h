@@ -23,11 +23,11 @@ std::vector<std::string> split(std::string s, std::string delimiter) {
     return res;
 }
 
-Level getObject(std::vector<std::string> obj)
+Object getObject(std::vector<std::string> obj)
 {
 
 
-    Level object = {};
+    Object object = {};
     for (size_t i = 0; i < obj.size() && obj.size() % 2 == 0; i++)
     {
 
@@ -64,9 +64,9 @@ Level getObject(std::vector<std::string> obj)
     return object;
 }
 
-std::vector<Level> parseLevel(std::string level)
+std::vector<Object> parseLevel(std::string level)
 {
-    std::vector<Level> v;
+    std::vector<Object> v;
     auto objs = split(level, ";");
 
     for (std::string obj : objs)
@@ -83,7 +83,7 @@ std::vector<Level> parseLevel(std::string level)
     return v;
 }
 
-std::vector<Level> parseLevelCompressed(std::string level)
+std::vector<Object> parseLevelCompressed(std::string level)
 {
     auto cipher = new gdcrypto::LevelDataCipher();
     auto decoded = cipher->decode(level);
