@@ -9,8 +9,9 @@
 int main(int argc, char** argv)
 {
 
-	auto str = ReadFile("6508283.gmd");
+	auto str = ReadFile("10000046.gmd");
 	auto a = parseLevelCompressed(str);
+	sortLevels(a);
 	
 	for (auto b : a)
 	{

@@ -85,10 +85,10 @@ std::vector<Level> parseLevel(std::string level)
 
 std::vector<Level> parseLevelCompressed(std::string level)
 {
-    auto c = new gdcrypto::LevelDataCipher;
-    auto d = c->decode(level);
+    auto cipher = new gdcrypto::LevelDataCipher();
+    auto decoded = cipher->decode(level);
 
-    auto decompressed = std::string(d.begin(), d.end());
+    auto decompressed = std::string(decoded.begin(), decoded.end());
 
     return parseLevel(decompressed);
 }
