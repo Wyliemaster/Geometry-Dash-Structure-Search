@@ -53,4 +53,46 @@ namespace structure
 
         return structures;
     }
+
+
+
+    float calculateDistance(const Object& obj1, const Object& obj2) {
+        return std::sqrt(std::pow(obj1.getposition_x() - obj2.getposition_x(), 2) + std::pow(obj1.getposition_y() - obj2.getposition_y(), 2));
+    }
+
+    float compareStructures(const std::vector<Object>& structure1, const std::vector<Object>& structure2) 
+    {
+        const std::vector<Object>& biggest = structure1.size() >= structure2.size() ? structure1 : structure2;
+        const std::vector<Object>& smallest = structure1.size() < structure2.size() ? structure1 : structure2;
+
+        std::vector<float> matched;
+
+        for (Object obj1 : biggest)
+        {
+            for (Object obj2 : smallest)
+            {
+                if (obj1.getobjectId() == obj2.getobjectId() && calculateDistance(obj1, obj2) < Settings::get()->OBJECT_SIZE)
+                {
+                    auto o = obj1.getobjectId(), o2 = obj2.getobjectId();
+
+                        float simularity_score = (1.0f - (calculateDistance(obj1, obj2) / Settings::get()->OBJECT_SIZE));
+                        matched.push_back(simularity_score);
+                }
+            }
+        }
+
+        int size = matched.size();
+
+        if (size == 0) return 0.0f;
+
+        float final_score = 0.0f;
+
+        for (size_t i = 0; i < size; i++)
+        {
+            final_score += matched[i];
+        }
+
+        return final_score / size;
+
+    }
 }

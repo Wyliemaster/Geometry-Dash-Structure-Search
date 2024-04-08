@@ -1,6 +1,9 @@
 #ifndef __SETTINGS__
 #define __SETTINGS__
 
+#include "Parser.h"
+#include "util.h"
+
 // Increased size by 10% due to float rounding issues
 #define GRID_SQUARE_UNIT 33
 
@@ -26,6 +29,8 @@ public:
 	// 1.6 Length Limit
 	int LEVEL_LENGTH_LIMIT = 1000 * 30;
 
+	float SIMULARITY_THRESHOLD = 0.75f;
+
 public:
 
 	Settings() = default;
@@ -35,7 +40,25 @@ public:
 	static Settings* s_settings;
 	static Settings* get();
 
-	void LoadSettingsFile();
+	void LoadSettingsFile()
+	{
+		std::ifstream t("settings.csv");
+		std::string conf((std::istreambuf_iterator<char>(t)),
+			std::istreambuf_iterator<char>());
+
+		auto lines = split(conf, "\n");
+
+		auto vCheck = split(lines[0], ",");
+		auto gSquare = split(lines[1], ",");
+		auto rotate = split(lines[2], ",");
+		auto similar = split(lines[3], ",");
+
+		this->VERSION_CHECK = vCheck[0] == "true";
+		this->OBJECT_SIZE = std::stof(gSquare[0]) * GRID_SQUARE_UNIT;
+		this->CHECK_90_DEGREES = rotate[0] == "true";
+		this->SIMULARITY_THRESHOLD = std::stof(similar[0]);
+
+	}
 
 private:
 

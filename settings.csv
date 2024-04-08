@@ -1,0 +1,4 @@
+true, Should check for signs of update 1.6
+1, The multiplier for how many grid squares should it link together into a structure
+true, Should check if the rotation is divisible by 90 Degrees in a version sheck
+0.80, How similar a structure should be before the program logs it

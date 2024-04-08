@@ -18,13 +18,12 @@ std::string ReadFile(std::string path)
 
 bool DistanceSort(Object& l, Object& r)
 {
-	// First compare x positions
 	if (l.getposition_x() < r.getposition_x())
 		return true;
 	else if (l.getposition_x() > r.getposition_x())
 		return false;
-	else // If x positions are equal, compare y positions
-		return l.getposition_y() < r.getposition_y();
+	else 
+		return l.getposition_y() < r.getposition_y(); // Secondary Sort by Y pos
 }
 
 void sortLevel(std::vector<Object>& level)
@@ -56,4 +55,44 @@ bool isLevelCorrectVersion(std::vector<Object>& level)
 	return correctVersion;
 }
 
+
+std::vector<Object> normalise(std::vector<Object>& obj)
+{
+	if (obj.empty())
+	{
+		return obj;
+	}
+
+	std::vector<Object> normalised;
+
+	sortLevel(obj);
+
+	int x = obj[0].getposition_x();
+	int y = obj[0].getposition_y();
+
+
+	for (Object o : obj)
+	{
+		if (x > o.getposition_x())
+		{
+			x = o.getposition_x();
+		}
+
+		if (y > o.getposition_y())
+		{
+			y = o.getposition_y();
+		}
+	}
+
+
+	for (Object object : obj)
+	{
+		object.setposition_x(object.getposition_x() - x);
+		object.setposition_y(object.getposition_y() - y);
+
+		normalised.emplace_back(object);
+	}
+
+	return normalised;
+}
 #endif
