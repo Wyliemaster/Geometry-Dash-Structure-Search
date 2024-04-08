@@ -1,6 +1,8 @@
 #ifndef __SETTINGS__
 #define __SETTINGS__
 
+// Increased size by 10% due to float rounding issues
+#define GRID_SQUARE_UNIT 33
 
 class Settings
 {
@@ -12,7 +14,7 @@ public:
 
 	// This will be used for relative threshold.
 	// The bigger this number, the less accuracy
-	int OBJECT_RADIUS = 30 / 2;
+	float OBJECT_SIZE = 1 * GRID_SQUARE_UNIT;
 
 	// Apparently, Update 1.6 supported 360 Degree rotations
 	// However, the editor did not allow the user to do it
@@ -33,7 +35,7 @@ public:
 	static Settings* s_settings;
 	static Settings* get();
 
-	void LoadFile();
+	void LoadSettingsFile();
 
 private:
 

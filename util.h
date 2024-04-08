@@ -16,14 +16,20 @@ std::string ReadFile(std::string path)
 	return str;
 }
 
-bool CompareHorizontalDistance(Object& l, Object& r)
+bool DistanceSort(Object& l, Object& r)
 {
-	return l.getposition_x() < r.getposition_x();
+	// First compare x positions
+	if (l.getposition_x() < r.getposition_x())
+		return true;
+	else if (l.getposition_x() > r.getposition_x())
+		return false;
+	else // If x positions are equal, compare y positions
+		return l.getposition_y() < r.getposition_y();
 }
 
 void sortLevel(std::vector<Object>& level)
 {
-	std::sort(level.begin(), level.end(), CompareHorizontalDistance);
+	std::sort(level.begin(), level.end(), DistanceSort);
 }
 
 bool isLevelCorrectVersion(std::vector<Object>& level)

@@ -4,23 +4,18 @@
 #include <fstream>
 
 #include "util.h"
+#include "structure.h"
 
 
 int main(int argc, char** argv)
 {
 
-	auto str = ReadFile("10000046.gmd");
+	auto str = ReadFile("test.gmd");
 	auto a = parseLevelCompressed(str);
 	sortLevel(a);
 	
-	bool correct = isLevelCorrectVersion(a);
-
-	for (auto &b : a)
-	{
-		printf("ID: %i, Position: [%i, %i], flipped: [%i, %i], Rotation: %i\n", b.getobjectId(), b.getposition_x(), b.getposition_y(), b.getflip_x(), b.getflip_y(), b.getrotation());
-	}
-
-	printf("1.6 <=: %s", correct ? "True" : "False");
+	auto s = structure::getStructures(a);	
+	printf("Structures Found: %s", s.size());
 
 	return 1;
 }
