@@ -31,7 +31,9 @@ void writeToLogFile(int threadID, const std::string& logMessage) {
 	}
 }
 
-// Stolen from ChatGPT
+#include <vector>
+#include <string>
+
 std::vector<std::vector<std::string>> splitVector(const std::vector<std::string>& vec, size_t n) {
 	std::vector<std::vector<std::string>> result;
 
@@ -43,7 +45,11 @@ std::vector<std::vector<std::string>> splitVector(const std::vector<std::string>
 	size_t startIndex = 0;
 
 	for (size_t i = 0; i < n; ++i) {
-		size_t chunkLength = chunkSize + (remainder-- > 0 ? 1 : 0); // Add remainder to first chunks
+		size_t chunkLength = chunkSize;
+		if (remainder > 0) {
+			chunkLength++;
+			remainder--;
+		}
 
 		// Create a smaller vector from the original vector
 		result.push_back(std::vector<std::string>(vec.begin() + startIndex, vec.begin() + startIndex + chunkLength));
@@ -54,6 +60,7 @@ std::vector<std::vector<std::string>> splitVector(const std::vector<std::string>
 
 	return result;
 }
+
 void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection> structures, const int THREAD_ID)
 {
 	const int LEVELS_IN_VEC = paths.size();
