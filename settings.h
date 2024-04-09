@@ -31,6 +31,10 @@ public:
 
 	float SIMULARITY_THRESHOLD = 0.75f;
 
+	int STRUCTURE_INDEX = 0;
+
+	bool FOLDER_MODE = true;
+
 public:
 
 	Settings() = default;
@@ -52,11 +56,15 @@ public:
 		auto gSquare = split(lines[1], ",");
 		auto rotate = split(lines[2], ",");
 		auto similar = split(lines[3], ",");
+		auto struct_id = split(lines[4], ",");
+		auto folder = split(lines[5], ",");
 
 		this->VERSION_CHECK = vCheck[0] == "true";
 		this->OBJECT_SIZE = std::stof(gSquare[0]) * GRID_SQUARE_UNIT;
 		this->CHECK_90_DEGREES = rotate[0] == "true";
 		this->SIMULARITY_THRESHOLD = std::stof(similar[0]);
+		this->STRUCTURE_INDEX = std::stoi(struct_id[0]);
+		this->FOLDER_MODE = folder[0] == "true";
 
 	}
 

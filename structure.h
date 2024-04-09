@@ -69,25 +69,32 @@ namespace structure
 
         for (Object obj1 : biggest)
         {
+            std::vector<float> objDistance;
             for (Object obj2 : smallest)
             {
-                if (obj1.getobjectId() == obj2.getobjectId() && calculateDistance(obj1, obj2) < Settings::get()->OBJECT_SIZE)
+                float distance = calculateDistance(obj1, obj2);
+                if (obj1.getobjectId() == obj2.getobjectId() && distance <= Settings::get()->OBJECT_SIZE)
                 {
-                    auto o = obj1.getobjectId(), o2 = obj2.getobjectId();
-
-                        float simularity_score = (1.0f - (calculateDistance(obj1, obj2) / Settings::get()->OBJECT_SIZE));
-                        matched.push_back(simularity_score);
+                    objDistance.push_back(distance);
                 }
+            }
+
+            sortFloatVec(objDistance);
+
+            if (!objDistance.empty())
+            {
+                matched.push_back(1.0 - (objDistance[0] / Settings::get()->OBJECT_SIZE));
             }
         }
 
-        int size = matched.size();
+
+        int size = biggest.size();
 
         if (size == 0) return 0.0f;
 
         float final_score = 0.0f;
 
-        for (size_t i = 0; i < size; i++)
+        for (size_t i = 0; i < matched.size(); i++)
         {
             final_score += matched[i];
         }

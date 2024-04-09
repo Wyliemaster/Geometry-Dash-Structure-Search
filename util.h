@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <algorithm>
+#include <filesystem>
 
 #include "GJGameLevel.h"
 #include "settings.h"
@@ -16,6 +17,16 @@ std::string ReadFile(std::string path)
 	return str;
 }
 
+std::vector<std::string> getAllFilesInDirectory(const std::string& directoryPath) {
+	std::vector<std::string> filePaths;
+	for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
+		if (std::filesystem::is_regular_file(entry.path())) {
+			filePaths.push_back(entry.path().string());
+		}
+	}
+	return filePaths;
+}
+
 bool DistanceSort(Object& l, Object& r)
 {
 	if (l.getposition_x() < r.getposition_x())
@@ -26,9 +37,19 @@ bool DistanceSort(Object& l, Object& r)
 		return l.getposition_y() < r.getposition_y(); // Secondary Sort by Y pos
 }
 
+bool FloatSort(float l, float r)
+{
+	return l < r;
+}
+
 void sortLevel(std::vector<Object>& level)
 {
 	std::sort(level.begin(), level.end(), DistanceSort);
+}
+
+void sortFloatVec(std::vector<float>& data)
+{
+	std::sort(data.begin(), data.end(), FloatSort);
 }
 
 bool isLevelCorrectVersion(std::vector<Object>& level)
