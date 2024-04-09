@@ -1,10 +1,12 @@
 #ifndef __SETTINGS__
 #define __SETTINGS__
 
+#include <memory>
+
 #include "Parser.h"
 #include "util.h"
 
-#define LOG_DIVIDER "===========\n"
+#define LOG_DIVIDER "==================================\n"
 // Increased size by 10% due to float rounding issues
 #define GRID_SQUARE_UNIT 33
 
@@ -38,14 +40,17 @@ public:
 
 	unsigned int THREADS = 1;
 
+	unsigned int LEVEL_INTERVAL = 50;
+
 public:
+	static Settings* get() {
+		static std::unique_ptr<Settings> s_settings(new Settings());
+		return s_settings.get();
+	}
 
 	Settings() = default;
 
 	~Settings() = default;
-
-	static Settings* s_settings;
-	static Settings* get();
 
 	void LoadSettingsFile()
 	{
@@ -55,6 +60,8 @@ public:
 
 		auto lines = split(conf, "\n");
 
+		t.close();
+
 		auto vCheck = split(lines[0], ",");
 		auto gSquare = split(lines[1], ",");
 		auto rotate = split(lines[2], ",");
@@ -62,6 +69,8 @@ public:
 		auto struct_id = split(lines[4], ",");
 		auto folder = split(lines[5], ",");
 		auto thread = split(lines[6], ",");
+		auto interval = split(lines[7], ",");
+
 
 		this->VERSION_CHECK = vCheck[0] == "true";
 		this->OBJECT_SIZE = std::stof(gSquare[0]) * GRID_SQUARE_UNIT;
@@ -70,6 +79,7 @@ public:
 		this->STRUCTURE_INDEX = std::stoi(struct_id[0]);
 		this->FOLDER_MODE = folder[0] == "true";
 		this->THREADS = std::stoi(thread[0]);
+		this->LEVEL_INTERVAL = std::stoi(interval[0]);
 
 	}
 
@@ -77,13 +87,4 @@ private:
 
 };
 
-Settings* Settings::s_settings = nullptr;
-Settings* Settings::get()
-{
-	if (s_settings == nullptr)
-	{
-		s_settings = new Settings();
-	}
-	return s_settings;
-}
 #endif

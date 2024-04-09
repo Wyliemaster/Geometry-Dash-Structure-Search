@@ -56,8 +56,17 @@ std::vector<std::vector<std::string>> splitVector(const std::vector<std::string>
 }
 void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection> structures, const int THREAD_ID)
 {
+	const int LEVELS_IN_VEC = paths.size();
+	int counter = 0;
 	for (std::string& path : paths)
 	{
+		counter++;
+
+		if (counter % Settings::get()->LEVEL_INTERVAL == 0)
+		{
+			printf("Thread %d: %d / %d\n", THREAD_ID, counter, LEVELS_IN_VEC);
+		}
+
 		std::string level = ReadFile(path);
 
 		std::vector<Object> parsed;
@@ -84,7 +93,7 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 			{
 				std::stringstream log;
 				log << path.c_str() << " contained a Simularity score of " << score;
-				printf("Level Path: %s\nScore: %f\n%s", path.c_str(), score, LOG_DIVIDER);
+				printf("%sLevel Path: %s\nScore: %f\n%s", LOG_DIVIDER, path.c_str(), score, LOG_DIVIDER);
 				writeToLogFile(THREAD_ID, log.str());
 			}
 		}
@@ -98,11 +107,14 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 		}
 		parsed_obj.clear();
 	}
+
+	printf("%sThread %d has finished\n%s", LOG_DIVIDER, THREAD_ID, LOG_DIVIDER);
 }
 
 int main(int argc, char** argv)
 {
-	printf("Running Program...\n");
+	printf("Geometry Dash Structure Search\n");
+	printf("Author: Wylie\n%s", LOG_DIVIDER);
 	Settings::get()->LoadSettingsFile();
 
 	auto structure = ReadFile("structure.txt");
@@ -122,24 +134,22 @@ int main(int argc, char** argv)
 		paths = split(levels, ",");
 	}
 
+	printf("Number of threads: %d\n", Settings::get()->THREADS);
 	printf("Number of levels to analyse: %d\n%s", paths.size(), LOG_DIVIDER);
+
 
 	std::vector<std::thread> threads;
 	std::vector<std::vector<std::string>> path_data = splitVector(paths, Settings::get()->THREADS);
 
 	for (size_t i = 0; i < Settings::get()->THREADS; i++)
 	{
-		threads.push_back(std::thread(processLevels, path_data[i], struct_obj, i + 1));
+		threads.emplace_back(std::thread(processLevels, path_data[i], struct_obj, i + 1));
 	}
 
 	for (auto& thread : threads)
 	{
 		thread.join();
 	}
-
-
-
-
 
 	return 1;
 }
