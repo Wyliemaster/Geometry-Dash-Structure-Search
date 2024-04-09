@@ -4,6 +4,7 @@
 #include "Parser.h"
 #include "util.h"
 
+#define LOG_DIVIDER "===========\n"
 // Increased size by 10% due to float rounding issues
 #define GRID_SQUARE_UNIT 33
 
@@ -35,6 +36,8 @@ public:
 
 	bool FOLDER_MODE = true;
 
+	unsigned int THREADS = 1;
+
 public:
 
 	Settings() = default;
@@ -58,6 +61,7 @@ public:
 		auto similar = split(lines[3], ",");
 		auto struct_id = split(lines[4], ",");
 		auto folder = split(lines[5], ",");
+		auto thread = split(lines[6], ",");
 
 		this->VERSION_CHECK = vCheck[0] == "true";
 		this->OBJECT_SIZE = std::stof(gSquare[0]) * GRID_SQUARE_UNIT;
@@ -65,6 +69,7 @@ public:
 		this->SIMULARITY_THRESHOLD = std::stof(similar[0]);
 		this->STRUCTURE_INDEX = std::stoi(struct_id[0]);
 		this->FOLDER_MODE = folder[0] == "true";
+		this->THREADS = std::stoi(thread[0]);
 
 	}
 

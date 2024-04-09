@@ -20,9 +20,7 @@ std::string ReadFile(std::string path)
 std::vector<std::string> getAllFilesInDirectory(const std::string& directoryPath) {
 	std::vector<std::string> filePaths;
 	for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
-		if (std::filesystem::is_regular_file(entry.path())) {
-			filePaths.push_back(entry.path().string());
-		}
+		filePaths.push_back(entry.path().string());		
 	}
 	return filePaths;
 }

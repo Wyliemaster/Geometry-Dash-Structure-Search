@@ -18,16 +18,12 @@ public:
         this->position_x = other.position_x;
         this->position_y = other.position_y;
         this->rotation = other.rotation;
-        this->flip_x = other.flip_x;
-        this->flip_y = other.flip_y;
     }
 
     SYNTHESIZE(objectId, unsigned int);
     SYNTHESIZE(position_x, int);
     SYNTHESIZE(position_y, int);
     SYNTHESIZE(rotation, int);
-    SYNTHESIZE(flip_x, bool);
-    SYNTHESIZE(flip_y, bool);
 
 };
 

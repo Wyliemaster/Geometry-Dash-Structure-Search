@@ -1,5 +1,6 @@
 #include <vector>
 #include <cmath>
+#include <queue>
 
 #include "GJGameLevel.h"
 #include "settings.h"
@@ -8,26 +9,35 @@ typedef std::vector<Object> ObjectCollection;
 
 namespace structure
 {
+
+    float calculateDistance(const Object& obj1, const Object& obj2) {
+        return std::sqrt(std::pow(obj1.getposition_x() - obj2.getposition_x(), 2) + std::pow(obj1.getposition_y() - obj2.getposition_y(), 2));
+    }
+
     void exploreNeighbors(const std::vector<Object>& objects, std::vector<Object>& currentStruct, std::vector<bool>& visited, int index)
     {
-        visited[index] = true;
-        const Object& obj = objects[index];
-        currentStruct.push_back(obj);
+        std::queue<int> toVisit;
+        toVisit.push(index);
 
-        int x1 = obj.getposition_x();
-        int y1 = obj.getposition_y();
+        while (!toVisit.empty()) {
+            int currentIdx = toVisit.front();
+            toVisit.pop();
 
-        for (size_t j = 0; j < objects.size(); j++)
-        {
-            if (!visited[j])
-            {
-                const Object& nextObj = objects[j];
-                int x2 = nextObj.getposition_x();
-                int y2 = nextObj.getposition_y();
-                float distance = std::sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-                if (distance <= Settings::get()->OBJECT_SIZE)
-                {
-                    exploreNeighbors(objects, currentStruct, visited, j);
+            if (visited[currentIdx]) {
+                continue;
+            }
+
+            visited[currentIdx] = true;
+            const Object& obj = objects[currentIdx];
+            currentStruct.push_back(obj);
+
+            for (size_t j = 0; j < objects.size(); ++j) {
+                if (!visited[j]) {
+                    const Object& nextObj = objects[j];
+                    float distance = calculateDistance(obj, nextObj);
+                    if (distance <= Settings::get()->OBJECT_SIZE) {
+                        toVisit.push(j);
+                    }
                 }
             }
         }
@@ -48,17 +58,18 @@ namespace structure
                 {
                     structures.push_back(currentStruct);
                 }
+                currentStruct.clear();
             }
         }
+
+        visited.clear();
 
         return structures;
     }
 
 
 
-    float calculateDistance(const Object& obj1, const Object& obj2) {
-        return std::sqrt(std::pow(obj1.getposition_x() - obj2.getposition_x(), 2) + std::pow(obj1.getposition_y() - obj2.getposition_y(), 2));
-    }
+ 
 
     float compareStructures(const std::vector<Object>& structure1, const std::vector<Object>& structure2) 
     {

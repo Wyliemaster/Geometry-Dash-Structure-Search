@@ -46,12 +46,6 @@ Object getObject(std::vector<std::string> obj)
         case 3:
             object.setposition_y(p_value);
             break;
-        case 4:
-            object.setflip_x(p_value == 1);
-            break;
-        case 5:
-            object.setflip_y(p_value == 1);
-            break;
         case 6:
             object.setrotation(p_value);
             break;
