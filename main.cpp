@@ -1,7 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <thread>
-#include <mutex>
+#include <vector>
+#include <string>
 
 #include "GJGameLevel.h"
 #include "Parser.h"
@@ -9,60 +10,46 @@
 #include "structure.h"
 
 void writeToLogFile(int threadID, const std::string& logMessage) {
-	// Create a stringstream to construct the file name
-	std::stringstream ss;
-	ss << "log_" << threadID << ".txt";
-	std::string fileName = ss.str();
-
-	// Create a mutex to ensure thread safety
-	static std::mutex fileMutex;
-
-	// Acquire the lock to write to the file
-	std::lock_guard<std::mutex> lock(fileMutex);
-
-	// Open the file in append mode
+	std::string fileName = "log_" + std::to_string(threadID) + ".txt";
 	std::ofstream file(fileName, std::ios::app);
 	if (file.is_open()) {
 		file << logMessage << std::endl;
 		file.close();
 	}
 	else {
-		std::cerr << "Failed to open file: " << fileName << std::endl;
+		std::cerr << "Failed to open file: " << fileName << ": " << logMessage << "\n";
 	}
 }
 
-#include <vector>
-#include <string>
-
 std::vector<std::vector<std::string>> splitVector(const std::vector<std::string>& vec, size_t n) {
 	std::vector<std::vector<std::string>> result;
+	result.reserve(n);
 
-	// Calculate the size of each smaller vector
 	size_t chunkSize = vec.size() / n;
-	size_t remainder = vec.size() % n; // Handle any remaining elements
+	size_t remainder = vec.size() % n;
 
-	// Starting index for each chunk
 	size_t startIndex = 0;
 
 	for (size_t i = 0; i < n; ++i) {
 		size_t chunkLength = chunkSize;
+
 		if (remainder > 0) {
 			chunkLength++;
 			remainder--;
 		}
 
-		// Create a smaller vector from the original vector
-		result.push_back(std::vector<std::string>(vec.begin() + startIndex, vec.begin() + startIndex + chunkLength));
+		result.emplace_back(std::vector<std::string>(vec.begin() + startIndex, vec.begin() + startIndex + chunkLength));
 
-		// Update the start index for the next chunk
 		startIndex += chunkLength;
 	}
 
 	return result;
 }
 
+// Used in threads for faster processing
 void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection> structures, const int THREAD_ID)
 {
+	// For progress logging
 	const int LEVELS_IN_VEC = paths.size();
 	int counter = 0;
 	for (std::string& path : paths)
@@ -78,6 +65,7 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 
 		std::vector<Object> parsed;
 
+		// Checking the format of the level string
 		if (level[0] == 'k')
 		{
 			parsed = parseLevel(level);
@@ -124,7 +112,19 @@ int main(int argc, char** argv)
 	printf("Author: Wylie\n%s", LOG_DIVIDER);
 	Settings::get()->LoadSettingsFile();
 
+	if (!Settings::get()->HAS_LOADED)
+	{
+		return 0;
+	}
+
 	auto structure = ReadFile("structure.txt");
+
+	if (structure.empty())
+	{
+		printf("ERROR: No `structure.txt` content found\n");
+		return 0;
+	}
+
 	auto struct_data = parseLevelCompressed(structure);
 	sortLevel(struct_data);
 	auto struct_obj = structure::getStructures(struct_data);
@@ -142,10 +142,12 @@ int main(int argc, char** argv)
 	}
 
 	printf("Number of threads: %d\n", Settings::get()->THREADS);
-	printf("Number of levels to analyse: %d\n%s", paths.size(), LOG_DIVIDER);
+	printf("Number of levels to analyse: %zu\n%s", paths.size(), LOG_DIVIDER);
 
 
 	std::vector<std::thread> threads;
+	threads.reserve(Settings::get()->THREADS);
+
 	std::vector<std::vector<std::string>> path_data = splitVector(paths, Settings::get()->THREADS);
 
 	for (size_t i = 0; i < Settings::get()->THREADS; i++)

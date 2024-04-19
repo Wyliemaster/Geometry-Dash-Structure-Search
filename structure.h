@@ -72,15 +72,17 @@ namespace structure
         const std::vector<Object>& smallest = structure1.size() < structure2.size() ? structure1 : structure2;
 
         std::vector<float> matched;
-        matched.reserve(biggest.size()); // Reserve memory to avoid reallocations
+        matched.reserve(biggest.size());
 
-        for (const Object& obj1 : biggest) // Use const reference
+        for (const Object& obj1 : biggest)
         {
+            // If no match is found, it will add 0
             float bestMatch = 0.0f;
-            for (const Object& obj2 : smallest) // Use const reference
+            for (const Object& obj2 : smallest)
             {
-                if (obj1.getobjectId() == obj2.getobjectId()) // Check object ID first
+                if (obj1.getobjectId() == obj2.getobjectId()) 
                 {
+                    // Check if the object is in the correct grid square
                     float distance = calculateDistance(obj1, obj2);
                     if (distance <= Settings::get()->OBJECT_SIZE)
                     {
@@ -91,6 +93,9 @@ namespace structure
             matched.push_back(bestMatch);
         }
 
+        // If there object count differs then it shouldn't
+        // return a 100% match. adding 0 to deduct accuracy
+        // should reduce false positives
         int diff = biggest.size() - smallest.size();
 
         for (size_t i = 0; i < diff; i++)
@@ -98,17 +103,15 @@ namespace structure
             matched.push_back(0);
         }
 
-        int size = biggest.size();
-
-        if (size == 0) return 0.0f;
+        // Avoid a divide by 0 error
+        if (matched.size() == 0) return 0.0f;
 
         float final_score = 0.0f;
-
         for (size_t i = 0; i < matched.size(); i++)
         {
             final_score += matched[i];
         }
 
-        return final_score / size;
+        return final_score / matched.size();
     }
 }

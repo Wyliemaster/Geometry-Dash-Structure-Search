@@ -14,6 +14,8 @@ class Settings
 {
 public:
 
+	bool HAS_LOADED = false;
+
 	// This will make sure to check the level for update 1.6
 	bool VERSION_CHECK = true;
 
@@ -55,12 +57,27 @@ public:
 	void LoadSettingsFile()
 	{
 		std::ifstream t("settings.csv");
+
+		if (!t.good())
+		{
+			printf("ERROR: unable to locate `settings.csv`\n");
+			return;
+		}
+
 		std::string conf((std::istreambuf_iterator<char>(t)),
 			std::istreambuf_iterator<char>());
 
 		auto lines = split(conf, "\n");
 
 		t.close();
+
+
+		const unsigned int CONFIG_NO = 8;
+		if (lines.size() < CONFIG_NO)
+		{
+			printf("ERROR: Missing %zu configurations from `settings.csv`\n", CONFIG_NO - lines.size());
+			return;
+		}
 
 		auto vCheck = split(lines[0], ",");
 		auto gSquare = split(lines[1], ",");
@@ -80,7 +97,7 @@ public:
 		this->FOLDER_MODE = folder[0] == "true";
 		this->THREADS = std::stoi(thread[0]);
 		this->LEVEL_INTERVAL = std::stoi(interval[0]);
-
+		this->HAS_LOADED = true;
 	}
 
 private:
