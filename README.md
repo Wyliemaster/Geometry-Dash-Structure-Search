@@ -25,41 +25,44 @@ There are 3 files to be mindful of
 
 # Building
 
-This project can be built using CMake and C++ 17.
-
-> **Important:** this project relies zlib. Please compile a static instance of it and place it into `lib` before trying to build
-
-- On windows the lib is `zlibstatic.lib`
-- On Unix the lib is `libz.so`
-
-Firstly, create a build directory
+> This project can be built using CMake and C++ 17. To start recursively clone the repository
 
 ```sh
-mkdir build
+git clone https://github.com/Wyliemaster/Geometry-Dash-Structure-Search.git --recursive
+``` 
+# Windows
+
+> *Before you can compile this on windows, you need to have a library for Zlib available. so to start off compile zlib and place the `zlibstatic.lib` inside the `lib/` directory*
+
+Once `zlibstatic.lib` has been placed in the directory, you can configure cmake from the project root using
+
+```sh
+cmake -B build
 ```
 
-And then navigate to it
+and then you can build it in release mode
 
 ```sh
-cd build
+cmake --build build --config release
 ```
 
-now run the following command
+# Linux
+
+> You will need zlib installed to build this project. You can do it with these commands
+> ```sh
+> sudo apt install zlib1g
+> ```
+
+From the root of the project enter the following command to configure cmake
 
 ```sh
-cmake ..
-```
+ cmake -B build -DCMAKE_BUILD_TYPE=Release
+ ```
 
-## Windows
-
-Open up the build folder and open the .sln file. from there go to the `search` project and build with visual studio
-
-## Linux
-
-enter the following
+ and then to build, run
 
 ```sh
-make
+  cmake --build build
 ```
 
 # Credits
