@@ -21,4 +21,32 @@ There are 3 files to be mindful of
 | SCORE_THRESHOLD  | How high the similarity score has to be before it shows on logs                                         | `0.0-1.0`                   |
 | STRUCTURE_INDEX  | Which structure should be used in order of X Position. Index is **0-Based**                             | Any Positive number         |
 | USE_LEVEL_FOLDER | If the `levels/` folder should be scanned rather than using `levels.txt`                                | `true` or `false`           |
-| THREADS | The number of threads to use in the program | Any Positive number |
+| THREADS          | The number of threads to use in the program                                                             | Any Positive number         |
+
+# Building
+
+This project can be built using CMake and C++ 17.
+
+> **Important:** this project relies zlib. Please compile a static instance of it and place it into `lib` before trying to build
+
+Firstly, create a build directory
+
+```sh
+mkdir build
+```
+
+And then navigate to it
+
+```sh
+cd build
+```
+
+now run the following command
+
+```sh
+cmake ..
+```
+
+
+# Credits
+- [SMJS](https://github.com/SMJSGaming) for Zlib and Base64 assistance
