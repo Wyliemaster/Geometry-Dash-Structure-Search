@@ -86,8 +86,6 @@ std::vector<Object> parseLevelCompressed(std::string level)
     auto decoded = decoder->decode();
 
     std::string str(decoded.begin(), decoded.end());
-
-
     auto decompressed = Gzip::decompress(str);
 
     return parseLevel(decompressed);

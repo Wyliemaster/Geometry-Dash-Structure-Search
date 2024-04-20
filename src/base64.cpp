@@ -39,6 +39,7 @@ std::vector<unsigned char> base64::decode()
     }
 
     std::vector<unsigned char> decoded;
+    decoded.reserve(this->size * 0.75);
     for (size_t i = 0; i < this->size; i += 4)
     {
         uint32_t data = 0;
@@ -47,12 +48,14 @@ std::vector<unsigned char> base64::decode()
         {
             if (base64::m_indexes[this->data[i + j]] != 64)
             {
+                // base64 only uses 6 bits so we are shifting it left by 6j
                 data += base64::m_indexes[this->data[i + j]] << (3 - j) * 6;
             }
         }
-        decoded.push_back(static_cast<unsigned char>((data >> 16) & 0xFF));
-        decoded.push_back(static_cast<unsigned char>((data >> 8) & 0xFF));
-        decoded.push_back(static_cast<unsigned char>(data & 0xFF));
+
+        decoded.emplace_back(static_cast<unsigned char>((data >> 16) & 0xFF));
+        decoded.emplace_back(static_cast<unsigned char>((data >> 8) & 0xFF));
+        decoded.emplace_back(static_cast<unsigned char>(data & 0xFF));
     }
     return decoded;
 }

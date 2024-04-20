@@ -29,6 +29,9 @@ This project can be built using CMake and C++ 17.
 
 > **Important:** this project relies zlib. Please compile a static instance of it and place it into `lib` before trying to build
 
+- On windows the lib is `zlibstatic.lib`
+- On Unix the lib is `libz.so`
+
 Firstly, create a build directory
 
 ```sh

@@ -143,6 +143,7 @@ int main(int argc, char** argv)
 
 	unsigned int thread_count = std::thread::hardware_concurrency() < Settings::get()->THREADS ? std::thread::hardware_concurrency() : Settings::get()->THREADS;
 
+	// Just in case hardware_concurrency errors
 	if (thread_count == 0)
 	{
 		thread_count = 2;
