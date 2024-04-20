@@ -47,6 +47,17 @@ now run the following command
 cmake ..
 ```
 
+## Windows
+
+Open up the build folder and open the .sln file. from there go to the `search` project and build with visual studio
+
+## Linux
+
+enter the following
+
+```sh
+make
+```
 
 # Credits
 - [SMJS](https://github.com/SMJSGaming) for Zlib and Base64 assistance

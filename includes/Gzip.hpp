@@ -1,8 +1,11 @@
 #pragma once
+
+// Credits to SMJS
 #include <zlib.h>
 #include <string>
 #include <stdexcept>
 #include <functional>
+
 
 #define GZIP_INITIAL_CHUNK_SIZE UINT16_MAX << 4 | 0xF
 #define GZIP_BUFFER_FACTOR 2

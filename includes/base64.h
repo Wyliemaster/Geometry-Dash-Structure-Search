@@ -5,6 +5,7 @@
 #include <cstring>
 #include <stdio.h>
 #include <string>
+#include <vector>
 
 class base64
 {
@@ -13,7 +14,6 @@ private:
     size_t size;
 
 public:
-    static std::unordered_map<char, unsigned char> lookup;
     static std::vector<int> m_indexes;
 
     std::vector<unsigned char> decode();
