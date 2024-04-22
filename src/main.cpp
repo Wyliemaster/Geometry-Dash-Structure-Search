@@ -77,7 +77,7 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 		sortLevel(parsed);
 		auto parsed_obj = structure::getStructures(parsed);
 
-		for (auto obj : parsed_obj)
+		for (ObjectCollection& obj : parsed_obj)
 		{
 			float score = structure::compareStructures(
 				normalise(structures[Settings::get()->STRUCTURE_INDEX]),
@@ -91,18 +91,16 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 				printf("%sLevel Path: %s\nScore: %f\n%s", LOG_DIVIDER, path.c_str(), score, LOG_DIVIDER);
 				writeToLogFile(THREAD_ID, log.str());
 			}
+			// Not Needed anymore
+			obj.clear();
 		}
 
 		// cleanup
 		parsed.clear();
-
-		for (std::vector<Object>& vec : parsed_obj)
-		{
-			vec.clear();
-		}
 		parsed_obj.clear();
 	}
 
+	paths.clear();
 	printf("%sThread %d has finished\n%s", LOG_DIVIDER, THREAD_ID, LOG_DIVIDER);
 }
 
@@ -164,7 +162,7 @@ int main(int argc, char** argv)
 		threads.emplace_back(std::thread(processLevels, path_data[i], struct_obj, i + 1));
 	}
 
-	for (auto& thread : threads)
+	for (std::thread& thread : threads)
 	{
 		thread.join();
 	}

@@ -42,6 +42,7 @@ namespace structure
         }
     }
 
+
     std::vector<ObjectCollection> getStructures(std::vector<Object>& objects)
     {
         std::vector<ObjectCollection> structures;
@@ -103,15 +104,19 @@ namespace structure
             matched.push_back(0);
         }
 
+        int size = matched.size();
+
         // Avoid a divide by 0 error
-        if (matched.size() == 0) return 0.0f;
+        if (size == 0) return 0.0f;
 
         float final_score = 0.0f;
-        for (size_t i = 0; i < matched.size(); i++)
+        for (size_t i = 0; i < size; i++)
         {
             final_score += matched[i];
         }
 
-        return final_score / matched.size();
+        matched.clear();
+
+        return final_score / size;
     }
 }
