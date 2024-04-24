@@ -106,6 +106,7 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 
 int main(int argc, char** argv)
 {
+	fflush(stdout);
 	printf("Geometry Dash Structure Search\n");
 	printf("Author: Wylie\n%s", LOG_DIVIDER);
 	Settings::get()->LoadSettingsFile();

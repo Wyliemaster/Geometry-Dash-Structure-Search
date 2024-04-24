@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <memory.h>
 
 #include "GJGameLevel.h"
 #include "base64.h"
@@ -81,7 +82,8 @@ std::vector<Object> parseLevel(std::string level)
 
 std::vector<Object> parseLevelCompressed(std::string level)
 {
-    base64 *decoder = new base64(level.data(), level.size());
+    std::vector<unsigned char> data(level.begin(), level.end());
+    std::unique_ptr<base64> decoder = std::make_unique<base64>(data);
 
     auto decoded = decoder->decode();
 

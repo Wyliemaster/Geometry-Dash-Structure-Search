@@ -10,14 +10,13 @@
 class base64
 {
 private:
-    const char* data;
-    size_t size;
+    std::vector<unsigned char> data;
 
 public:
     static std::vector<int> m_indexes;
 
     std::vector<unsigned char> decode();
-    base64(const char*, size_t);
+    base64(std::vector<unsigned char>);
     ~base64();
 
 private:

@@ -1,24 +1,25 @@
 #include "../includes/base64.h"
-base64::base64(const char* data, size_t size)
+base64::base64(std::vector<unsigned char> data)
 {
     this->data = data;
-    this->size = size;
 }
 
 base64::~base64()
 {
-    delete[] data;
+    this->data.clear();
 }
 
 bool base64::isValidBase64()
 {
+    size_t size = this->data.size();
+
     // If the data is not padded, it will reject
-    if (this->size == 0 || this->size % 4 != 0)
+    if (size == 0 || size % 4 != 0)
     {
         return false;
     }
 
-    for (size_t i = 0; i < this->size; ++i)
+    for (size_t i = 0; i < size; ++i)
     {
         unsigned char c = this->data[i];
         if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
@@ -38,9 +39,11 @@ std::vector<unsigned char> base64::decode()
         return {};
     }
 
+    size_t size = this->data.size();
+
     std::vector<unsigned char> decoded;
-    decoded.reserve(this->size * 0.75);
-    for (size_t i = 0; i < this->size; i += 4)
+    decoded.reserve(size * 0.75);
+    for (size_t i = 0; i < size; i += 4)
     {
         uint32_t data = 0;
 
