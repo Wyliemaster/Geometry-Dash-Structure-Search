@@ -18,7 +18,7 @@ std::string ReadFile(const std::string& path)
     return str;
 }
 
-const std::vector<std::string>& getAllFilesInDirectory(const std::string& directoryPath) {
+std::vector<std::string> getAllFilesInDirectory(const std::string& directoryPath) {
     size_t numFiles = std::distance(std::filesystem::directory_iterator(directoryPath),
         std::filesystem::directory_iterator());
 
