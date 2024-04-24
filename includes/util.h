@@ -18,8 +18,13 @@ std::string ReadFile(const std::string& path)
     return str;
 }
 
-std::vector<std::string> getAllFilesInDirectory(const std::string& directoryPath) {
+const std::vector<std::string>& getAllFilesInDirectory(const std::string& directoryPath) {
+    size_t numFiles = std::distance(std::filesystem::directory_iterator(directoryPath),
+        std::filesystem::directory_iterator());
+
     std::vector<std::string> filePaths;
+    filePaths.reserve(numFiles);
+
     for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
         filePaths.push_back(entry.path().string());
     }
