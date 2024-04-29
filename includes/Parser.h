@@ -19,7 +19,7 @@ std::vector<std::string> split(std::string s, std::string delimiter) {
     while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos) {
         token = s.substr(pos_start, pos_end - pos_start);
         pos_start = pos_end + delim_len;
-        res.push_back(token);
+        res.push_back(std::move(token));
     }
 
     res.push_back(s.substr(pos_start));
@@ -30,13 +30,11 @@ Object getObject(std::vector<std::string> obj)
 {
 
 
-    Object object = {};
+    Object object;
     for (size_t i = 0; i < obj.size() && obj.size() % 2 == 0; i++)
     {
-
-
-        auto p_id = atoi(obj[i].c_str());
-        auto p_value = atoi(obj[i + 1].c_str());
+        int p_id = atoi(obj[i].c_str());
+        int p_value = atoi(obj[i + 1].c_str());
 
         switch (p_id)
         {
@@ -66,7 +64,7 @@ std::vector<Object> parseLevel(std::string level)
     std::vector<Object> v;
     auto objs = split(level, ";");
 
-    for (std::string obj : objs)
+    for (std::string &obj : objs)
     {
         if (obj.substr(0, 1) == "k") continue;
 
