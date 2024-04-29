@@ -9,6 +9,7 @@
 #include "GJGameLevel.h"
 #include "base64.h"
 #include "Gzip.hpp"
+#include "settings.h"
 
 // https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
 std::vector<std::string> split(std::string s, std::string delimiter) {
@@ -109,15 +110,17 @@ std::vector<Object> parseLevelCompressed(std::string level)
         std::ostringstream filenameStream;
         filenameStream << std::chrono::duration_cast<std::chrono::milliseconds>(
                             std::chrono::system_clock::now().time_since_epoch()).count();
-        std::string filename = "ERROR_" + filenameStream.str() + ".txt";
+        std::string filename = "DECOMPRESSION_ERROR_" + filenameStream.str() + ".GD";
 
         std::ofstream errorFile(filename);
         if (errorFile.is_open()) {
-            errorFile << "Error occurred: " << level << std::endl;
+            errorFile << level << std::endl;
             errorFile.close();
         }
 
-        printf("Decompression error: %s\n", filename.c_str());
+        printf("%s", LOG_DIVIDER);
+        printf("ERROR: Failed to decompress level!\nSaving level data inside of: %s\n", filename.c_str());
+        printf("%s", LOG_DIVIDER);
 
         return {};
     }
