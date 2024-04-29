@@ -44,6 +44,8 @@ public:
 
 	unsigned int LEVEL_INTERVAL = 50;
 
+	unsigned int OBJECT_LIMIT = 40000;
+
 public:
 	static Settings* get() {
 		static std::unique_ptr<Settings> s_settings(new Settings());
@@ -87,6 +89,8 @@ public:
 		auto folder = split(lines[5], ",");
 		auto thread = split(lines[6], ",");
 		auto interval = split(lines[7], ",");
+		auto obj_limit = split(lines[8], ",");
+
 
 
 		this->VERSION_CHECK = vCheck[0] == "true";
@@ -97,6 +101,7 @@ public:
 		this->FOLDER_MODE = folder[0] == "true";
 		this->THREADS = std::stoi(thread[0]);
 		this->LEVEL_INTERVAL = std::stoi(interval[0]);
+		this->OBJECT_LIMIT = std::stoi(obj_limit[0]);
 		this->HAS_LOADED = true;
 	}
 

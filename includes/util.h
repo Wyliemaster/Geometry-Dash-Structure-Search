@@ -67,6 +67,11 @@ bool isLevelCorrectVersion(const std::vector<Object>& level)
         return true;
     }
 
+    if (level.size() > Settings::get()->OBJECT_LIMIT)
+    {
+        return false;
+    }
+
     for (const Object& obj : level)
     {
         if (obj.getposition_x() > Settings::get()->LEVEL_LENGTH_LIMIT ||
@@ -75,6 +80,7 @@ bool isLevelCorrectVersion(const std::vector<Object>& level)
             return false; // Return false as soon as an incorrect version is found
         }
     }
+
 
     return true; // If all objects pass the checks
 }
