@@ -26,7 +26,11 @@ std::vector<std::string> getAllFilesInDirectory(const std::string& directoryPath
     filePaths.reserve(numFiles);
 
     for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
-        filePaths.push_back(entry.path().string());
+        if (std::filesystem::is_regular_file(entry.path()))
+        {
+            //printf("%s filesize: %lluB\n", entry.path().string().c_str(), static_cast<unsigned long long>(std::filesystem::file_size(entry.path())));
+            filePaths.push_back(entry.path().string());
+        }
     }
     return filePaths;
 }

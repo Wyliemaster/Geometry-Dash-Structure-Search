@@ -13,7 +13,7 @@ namespace structure
         return std::sqrt(std::pow(obj1.getposition_x() - obj2.getposition_x(), 2) + std::pow(obj1.getposition_y() - obj2.getposition_y(), 2));
     }
 
-    void exploreNeighbors(const std::vector<Object>& objects, ObjectCollection& currentStruct, std::vector<bool>& visited, int index)
+    void exploreNeighbors(const std::vector<Object>& objects, ObjectCollection& currentStruct, std::vector<char>& visited, int index)
     {
         std::queue<int> toVisit;
         toVisit.push(index);
@@ -46,7 +46,7 @@ namespace structure
     std::vector<ObjectCollection> getStructures(std::vector<Object>& objects)
     {
         std::vector<ObjectCollection> structures;
-        std::vector<bool> visited(objects.size(), false);
+        std::vector<char> visited(objects.size(), false);
 
         for (size_t i = 0; i < objects.size(); i++)
         {

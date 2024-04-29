@@ -52,8 +52,9 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 	// For progress logging
 	const int LEVELS_IN_VEC = paths.size();
 	int counter = 0;
-	for (std::string& path : paths)
+	for (auto iter = paths.begin(); iter != paths.end();)
 	{
+		std::string &path = *iter;
 		counter++;
 
 		if (counter % Settings::get()->LEVEL_INTERVAL == 0)
@@ -75,28 +76,37 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 			parsed = parseLevelCompressed(level);
 		}
 		sortLevel(parsed);
+
 		auto parsed_obj = structure::getStructures(parsed);
 
-		for (ObjectCollection& obj : parsed_obj)
+		parsed.clear();
+
+		for (auto obj = parsed_obj.begin(); obj != parsed_obj.end(); /* no increment here */)
 		{
 			float score = structure::compareStructures(
 				normalise(structures[Settings::get()->STRUCTURE_INDEX]),
-				normalise(obj)
+				normalise(*obj)
 			);
 
 			if ( score > Settings::get()->SIMULARITY_THRESHOLD )
 			{
 				std::stringstream log;
-				log << path.c_str() << " contained a Simularity score of " << score;
+				log << path.c_str() << " contained a similarity score of " << score;
 				printf("%sLevel Path: %s\nScore: %f\n%s", LOG_DIVIDER, path.c_str(), score, LOG_DIVIDER);
 				writeToLogFile(THREAD_ID, log.str());
+				
+				// Erase the object from the vector
+				obj = parsed_obj.erase(obj);
 			}
-			// Not Needed anymore
-			obj.clear();
-		}
+			else
+			{
+				++obj;
+			}
+}
 
+
+		iter = paths.erase(iter);
 		// cleanup
-		parsed.clear();
 		parsed_obj.clear();
 	}
 
