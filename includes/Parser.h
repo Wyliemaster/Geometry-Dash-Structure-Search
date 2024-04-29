@@ -113,7 +113,7 @@ std::vector<Object> parseLevelCompressed(std::string level)
 
         std::ofstream errorFile(filename);
         if (errorFile.is_open()) {
-            errorFile << "Error occurred: " << err.what() << std::endl;
+            errorFile << "Error occurred: " << level << std::endl;
             errorFile.close();
         }
 
