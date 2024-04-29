@@ -80,19 +80,48 @@ std::vector<Object> parseLevel(std::string level)
     return v;
 }
 
+#include <fstream>
+#include <chrono>
+#include <sstream>
+#include <ctime>
+#include <vector>
+#include <string>
+#include <stdexcept>
+
 std::vector<Object> parseLevelCompressed(std::string level)
 {
-    std::vector<unsigned char> data(level.begin(), level.end());
-    std::unique_ptr<base64> decoder = std::make_unique<base64>(data);
+    try {
+        std::vector<unsigned char> data(level.begin(), level.end());
+        std::unique_ptr<base64> decoder = std::make_unique<base64>(data);
 
-    auto decoded = decoder->decode();
+        auto decoded = decoder->decode();
 
-    std::string str(decoded.begin(), decoded.end());
-    std::string decompressed = Gzip::decompress(str);
+        std::string str(decoded.begin(), decoded.end());
+        std::string decompressed = Gzip::decompress(str);
 
-    decoded.clear();
+        decoded.clear();
 
-    return parseLevel(decompressed);
+        return parseLevel(decompressed);
+    }
+    catch(const std::exception& err)
+    {
+        // Write error to file
+        std::ostringstream filenameStream;
+        filenameStream << std::chrono::duration_cast<std::chrono::milliseconds>(
+                            std::chrono::system_clock::now().time_since_epoch()).count();
+        std::string filename = "ERROR_" + filenameStream.str() + ".txt";
+
+        std::ofstream errorFile(filename);
+        if (errorFile.is_open()) {
+            errorFile << "Error occurred: " << err.what() << std::endl;
+            errorFile.close();
+        }
+
+        printf("Decompression error: %s\n", filename);
+
+        return {};
+    }
 }
+
 
 #endif
