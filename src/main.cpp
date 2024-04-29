@@ -89,8 +89,7 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 
 		for (auto obj = parsed_obj.begin(); obj != parsed_obj.end(); )
 		{
-			if (isLevelCorrectVersion(*obj))
-			{
+
 
 				float score = structure::compareStructures(
 					normalise(structures[Settings::get()->STRUCTURE_INDEX]),
@@ -104,8 +103,7 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 					writeToLogFile(THREAD_ID, log.str());
 				}
 				// Erase the object from the vector
-			}
-			obj = parsed_obj.erase(obj);
+				obj = parsed_obj.erase(obj);
 		}
 
 		iter = paths.erase(iter);

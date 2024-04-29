@@ -45,6 +45,11 @@ namespace structure
 
     std::vector<ObjectCollection> getStructures(std::vector<Object>& objects)
     {
+        if (!isLevelCorrectVersion(objects))
+		{
+            return {};
+        }
+
         std::vector<ObjectCollection> structures;
         std::vector<char> visited(objects.size(), false);
 
