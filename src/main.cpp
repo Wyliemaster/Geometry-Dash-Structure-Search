@@ -9,19 +9,23 @@
 #include "../includes/util.h"
 #include "../includes/structure.h"
 
-void writeToLogFile(int threadID, const std::string& logMessage) {
+void writeToLogFile(int threadID, const std::string &logMessage)
+{
 	std::string fileName = "log_" + std::to_string(threadID) + ".txt";
 	std::ofstream file(fileName, std::ios::app);
-	if (file.is_open()) {
+	if (file.is_open())
+	{
 		file << logMessage << std::endl;
 		file.close();
 	}
-	else {
+	else
+	{
 		std::cerr << "Failed to open file: " << fileName << ": " << logMessage << "\n";
 	}
 }
 
-std::vector<std::vector<std::string>> splitVector(const std::vector<std::string>& vec, size_t n) {
+std::vector<std::vector<std::string>> splitVector(const std::vector<std::string> &vec, size_t n)
+{
 	std::vector<std::vector<std::string>> result;
 	result.reserve(n);
 
@@ -30,10 +34,12 @@ std::vector<std::vector<std::string>> splitVector(const std::vector<std::string>
 
 	size_t startIndex = 0;
 
-	for (size_t i = 0; i < n; ++i) {
+	for (size_t i = 0; i < n; ++i)
+	{
 		size_t chunkLength = chunkSize;
 
-		if (remainder > 0) {
+		if (remainder > 0)
+		{
 			chunkLength++;
 			remainder--;
 		}
@@ -83,27 +89,24 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 
 		for (auto obj = parsed_obj.begin(); obj != parsed_obj.end(); /* no increment here */)
 		{
-			float score = structure::compareStructures(
-				normalise(structures[Settings::get()->STRUCTURE_INDEX]),
-				normalise(*obj)
-			);
-
-			if ( score > Settings::get()->SIMULARITY_THRESHOLD )
+			if (isLevelCorrectVersion(*obj))
 			{
-				std::stringstream log;
-				log << path.c_str() << " contained a similarity score of " << score;
-				printf("%sLevel Path: %s\nScore: %f\n%s", LOG_DIVIDER, path.c_str(), score, LOG_DIVIDER);
-				writeToLogFile(THREAD_ID, log.str());
-				
+
+				float score = structure::compareStructures(
+					normalise(structures[Settings::get()->STRUCTURE_INDEX]),
+					normalise(*obj));
+
+				if (score > Settings::get()->SIMULARITY_THRESHOLD)
+				{
+					std::stringstream log;
+					log << path.c_str() << " contained a similarity score of " << score;
+					printf("%sLevel Path: %s\nScore: %f\n%s", LOG_DIVIDER, path.c_str(), score, LOG_DIVIDER);
+					writeToLogFile(THREAD_ID, log.str());
+				}
 				// Erase the object from the vector
-				obj = parsed_obj.erase(obj);
 			}
-			else
-			{
-				++obj;
-			}
-}
-
+			obj = parsed_obj.erase(obj);
+		}
 
 		iter = paths.erase(iter);
 		// cleanup
@@ -114,7 +117,7 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 	printf("%sThread %d has finished\n%s", LOG_DIVIDER, THREAD_ID, LOG_DIVIDER);
 }
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
 	fflush(stdout);
 	printf("Geometry Dash Structure Search\n");
@@ -158,10 +161,8 @@ int main(int argc, char** argv)
 		thread_count = 2;
 	}
 
-
 	printf("Number of threads: %d\n", thread_count);
 	printf("Number of levels to analyse: %zu\n%s", paths.size(), LOG_DIVIDER);
-
 
 	std::vector<std::thread> threads;
 	threads.reserve(thread_count);
@@ -173,7 +174,7 @@ int main(int argc, char** argv)
 		threads.emplace_back(std::thread(processLevels, path_data[i], struct_obj, i + 1));
 	}
 
-	for (std::thread& thread : threads)
+	for (std::thread &thread : threads)
 	{
 		thread.join();
 	}
