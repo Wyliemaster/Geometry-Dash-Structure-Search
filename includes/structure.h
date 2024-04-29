@@ -28,7 +28,7 @@ namespace structure
 
             visited[currentIdx] = true;
             const Object& obj = objects[currentIdx];
-            currentStruct.push_back(obj);
+            currentStruct.push_back(std::move(obj));
 
             for (size_t j = 0; j < objects.size(); ++j) {
                 if (!visited[j]) {
@@ -56,7 +56,7 @@ namespace structure
                 exploreNeighbors(objects, currentStruct, visited, i);
                 if (!currentStruct.empty())
                 {
-                    structures.push_back(std::move(currentStruct)); // Move instead of copy
+                    structures.push_back(std::move(currentStruct));
                 }
                 currentStruct.clear();
             }

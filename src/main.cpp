@@ -87,7 +87,7 @@ void processLevels(std::vector<std::string> paths, std::vector<ObjectCollection>
 
 		parsed.clear();
 
-		for (auto obj = parsed_obj.begin(); obj != parsed_obj.end(); /* no increment here */)
+		for (auto obj = parsed_obj.begin(); obj != parsed_obj.end(); )
 		{
 			if (isLevelCorrectVersion(*obj))
 			{

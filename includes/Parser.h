@@ -74,7 +74,9 @@ std::vector<Object> parseLevel(std::string level)
 
         if (properties.size() == 1) continue;
 
-        v.push_back(getObject(properties));
+        auto object = getObject(properties);
+
+        v.push_back(std::move(object));
     }
 
     return v;

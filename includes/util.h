@@ -29,7 +29,8 @@ std::vector<std::string> getAllFilesInDirectory(const std::string& directoryPath
         if (std::filesystem::is_regular_file(entry.path()))
         {
             //printf("%s filesize: %lluB\n", entry.path().string().c_str(), static_cast<unsigned long long>(std::filesystem::file_size(entry.path())));
-            filePaths.push_back(entry.path().string());
+            auto pathname = entry.path().string();
+            filePaths.push_back(std::move(pathname));
         }
     }
     return filePaths;
