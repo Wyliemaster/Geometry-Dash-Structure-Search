@@ -117,7 +117,7 @@ std::vector<Object> parseLevelCompressed(std::string level)
             errorFile.close();
         }
 
-        printf("Decompression error: %s\n", filename);
+        printf("Decompression error: %s\n", filename.c_str());
 
         return {};
     }

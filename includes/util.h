@@ -25,14 +25,24 @@ std::vector<std::string> getAllFilesInDirectory(const std::string& directoryPath
     std::vector<std::string> filePaths;
     filePaths.reserve(numFiles);
 
+    size_t counter = 0;
+    const size_t TWO_PERCENT = numFiles / 50;
+
     for (const auto& entry : std::filesystem::directory_iterator(directoryPath)) {
+        if (counter % TWO_PERCENT == 0)
+        {
+            printf("%llu / %llu Files scanned\n", counter, numFiles);
+        }
+
         if (std::filesystem::is_regular_file(entry.path()))
         {
             //printf("%s filesize: %lluB\n", entry.path().string().c_str(), static_cast<unsigned long long>(std::filesystem::file_size(entry.path())));
             auto pathname = entry.path().string();
             filePaths.push_back(std::move(pathname));
         }
+            counter++;
     }
+    printf("%s", LOG_DIVIDER);
     return filePaths;
 }
 
