@@ -22,6 +22,7 @@ There are 3 files to be mindful of
 | STRUCTURE_INDEX  | Which structure should be used in order of X Position. Index is **0-Based**                             | Any Positive number         |
 | USE_LEVEL_FOLDER | If the `levels/` folder should be scanned rather than using `levels.txt`                                | `true` or `false`           |
 | THREADS          | The number of threads to use in the program                                                             | Any Positive number         |
+| OBJECT_LIMIT     | The max amount of objectss the level is allowed to search                                               | Any Positive number         |
 
 # Building
 
@@ -29,10 +30,11 @@ There are 3 files to be mindful of
 
 ```sh
 git clone https://github.com/Wyliemaster/Geometry-Dash-Structure-Search.git --recursive
-``` 
+```
+
 # Windows
 
-> *Before you can compile this on windows, you need to have a library for Zlib available. so to start off compile zlib and place the `zlibstatic.lib` inside the `lib/` directory*
+> _Before you can compile this on windows, you need to have a library for Zlib available. so to start off compile zlib and place the `zlibstatic.lib` inside the `lib/` directory_
 
 Once `zlibstatic.lib` has been placed in the directory, you can configure cmake from the project root using
 
@@ -49,6 +51,7 @@ cmake --build build --config release
 # Linux
 
 > You will need zlib installed to build this project. You can do it with these commands
+>
 > ```sh
 > sudo apt install zlib1g
 > ```
@@ -57,13 +60,14 @@ From the root of the project enter the following command to configure cmake
 
 ```sh
  cmake -B build -DCMAKE_BUILD_TYPE=Release
- ```
+```
 
- and then to build, run
+and then to build, run
 
 ```sh
   cmake --build build
 ```
 
 # Credits
+
 - [SMJS](https://github.com/SMJSGaming) for Zlib and Base64 assistance

@@ -78,7 +78,8 @@ bool isLevelCorrectVersion(const std::vector<Object>& level)
         return true;
     }
 
-    if (level.size() > Settings::get()->OBJECT_LIMIT)
+    // To include the max object
+    if (level.size() > (Settings::get()->OBJECT_LIMIT + 1))
     {
         return false;
     }

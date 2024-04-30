@@ -44,7 +44,7 @@ public:
 
 	unsigned int LEVEL_INTERVAL = 50;
 
-	unsigned int OBJECT_LIMIT = 40000;
+	unsigned int OBJECT_LIMIT = 8000;
 
 public:
 	static Settings* get() {
@@ -81,6 +81,8 @@ public:
 			return;
 		}
 
+		try {
+
 		auto vCheck = split(lines[0], ",");
 		auto gSquare = split(lines[1], ",");
 		auto rotate = split(lines[2], ",");
@@ -103,6 +105,11 @@ public:
 		this->LEVEL_INTERVAL = std::stoi(interval[0]);
 		this->OBJECT_LIMIT = std::stoi(obj_limit[0]);
 		this->HAS_LOADED = true;
+		} catch (const std::exception& err)
+		{
+			printf("%sFailed to load config\nLoading default values\n%s", LOG_DIVIDER, LOG_DIVIDER);
+			this->HAS_LOADED = true;
+		}
 	}
 
 private:
